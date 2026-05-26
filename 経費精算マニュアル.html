@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>経費精算マニュアル | KOMPEITO Administration</title>
+    <meta name="description" content="株式会社KOMPEITOの経費精算ルール、申請方法、勘定科目、および福利厚生制度に関する最新のマニュアルです。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=M+PLUS+1p:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="reminder-banner" id="mainReminderBanner">
+        <div class="container">
+            <p><i class="fas fa-bullhorn" id="reminderIcon"></i> <strong id="reminderTitle">リマインド:</strong>
+                <span id="dynamicReminderDate">20</span>日は最終申請期限です！
+                <span id="countdownBadge" class="countdown-badge" style="display:none;"></span>
+                <a href="#" target="_blank" class="calendar-btn" id="dynamicCalendarBtn">
+                    <i class="fas fa-calendar-plus"></i> カレンダーに登録
+                </a>
+            </p>
+        </div>
+    </div>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>経費精算マニュアル</h1>
+                <p class="subtitle">Expense Settlement Guide</p>
+                <div class="badge">最終更新: 2026年5月26日</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="card summary">
+            <h2><i class="fas fa-info-circle"></i> 重要なお知らせ</h2>
+            
+            <div class="news-container" id="newsContainer">
+                <!-- Page 1 (Latest 2 items) -->
+                <div class="news-page" data-page="1">
+                    <a href="#allowance-rules" class="news-item current">
+                        <span class="news-tag important">規定</span>
+                        <span class="news-date">2026.05.26</span>
+                        <span class="news-title">国内出張手当の算出ルールと「150km定義」の明確化について</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1lod9vyGTHfSK5d7jZmwQH1FVxFsp1iRj/view" target="_blank" class="news-item current">
+                        <span class="news-tag update">規定改訂</span>
+                        <span class="news-date">2026.03.01</span>
+                        <span class="news-title">出張旅費規定が改訂されました（2026/03/01施行版）</span>
+                    </a>
+                </div>
+                
+                <!-- Page 2 (History) -->
+                <div class="news-page" data-page="2" style="display:none;">
+                    <a href="#accommodation-rules" class="news-item">
+                        <span class="news-tag important">重要</span>
+                        <span class="news-date">2026.03.02</span>
+                        <span class="news-title">宿泊費の上限ルール変更およびエリア区分の設定について</span>
+                    </a>
+                    <a href="#how-to" class="news-item">
+                        <span class="news-tag highlight">通知</span>
+                        <span class="news-date">2026.02.20</span>
+                        <span class="news-title">経費精算の締日が毎月20日に変更されました</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- News Pagination -->
+            <div class="news-pagination">
+                <button class="page-link active" data-target="1">1</button>
+                <button class="page-link" data-target="2">2</button>
+            </div>
+
+            <p style="margin-top: 2rem;">本資料は、freeeを利用した経費精算のルールと申請項目をまとめた最新（2026/03/01改訂対応）のマニュアルです。</p>
+        </section>
+
+        <div class="contents-header">
+            <h3><i class="fas fa-list"></i> コンテンツ一覧</h3>
+        </div>
+        <nav class="quick-nav">
+            <a href="#how-to" class="nav-item"><i class="fas fa-mobile-alt"></i> 申請の流れ</a>
+            <a href="#travel" class="nav-item"><i class="fas fa-train"></i> 旅費交通費</a>
+            <a href="#entertainment" class="nav-item"><i class="fas fa-utensils"></i> 交際費・会議費</a>
+            <a href="#welfare" class="nav-item"><i class="fas fa-heart"></i> 福利厚生</a>
+        </nav>
+
+        <!-- 経費申請カレンダー (独立セクション) -->
+        <div id="schedule" class="schedule-container osorai-clean full-width">
+            <div class="osorai-header">
+                <h3><i class="fas fa-calendar-check"></i> 経費申請カレンダー</h3>
+                <div class="payroll-badge" id="dynamicPayrollInfo">今回の対象：---月20日締切 / ---月給与連携分</div>
+            </div>
+
+            <div class="osorai-body">
+                <p class="summary-text text-muted">対象期間は、以下の<strong>2つの期間</strong>を合算したものです。</p>
+                <div class="osorai-logic-grid">
+                    <div class="logic-box">
+                        <span class="box-label">期間 (1)</span>
+                        <div class="box-date" id="dynamicPrevRange">--/21 〜 --/--</div>
+                        <p class="box-desc">前回の締切翌日 〜 月末</p>
+                    </div>
+                    <div class="logic-plus">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="logic-box">
+                        <span class="box-label">期間 (2)</span>
+                        <div class="box-date" id="dynamicCurrRange">--/1 〜 --/20</div>
+                        <p class="box-desc">当月1日 〜 当月締切日</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="osorai-important">
+                <div class="important-notice">
+                    <i class="fas fa-exclamation-circle"></i> 重要：月跨ぎでの申請は不可。対象期間ごとに申請を分けてください。
+                </div>
+            </div>
+
+            <div class="osorai-footer-tips">
+                <span class="osorai-tip blue"><i class="fas fa-history"></i> 発生の都度、速やかな申請を推奨いたします</span>
+                <span class="osorai-tip green"><i class="far fa-handshake"></i> 適正な決算処理にご協力をお願いします</span>
+            </div>
+        </div>
+
+        <section id="how-to" class="category workflow-section">
+            <h2 class="category-title"><i class="fas fa-mobile-alt"></i> 申請の流れ (freee活用)</h2>
+
+            <div class="step-container">
+                <div class="step-card highlight">
+                    <div class="step-number">Step 0</div>
+                    <div class="step-icon"><i class="fas fa-file-signature"></i></div>
+                    <h3>事前稟議</h3>
+                    <p>出張・購入の前に、freeeの各種申請メニューより<strong>「事前稟議」</strong>の申請・承認が必須です。</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">Step 1</div>
+                    <div class="step-icon"><i class="fas fa-camera"></i></div>
+                    <h3>証憑を撮影</h3>
+                    <p>freeeアプリで領収書を撮影。AI-OCRが自動読取。※支払の<strong>翌営業日</strong>までの申請を推奨。</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">Step 2</div>
+                    <div class="step-icon"><i class="fas fa-link"></i></div>
+                    <h3>稟議との紐付け</h3>
+                    <p>適切な経費科目を選択し、必ず<strong>Step 0の事前稟議</strong>と紐付けを行ってください。</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">Step 3</div>
+                    <div class="step-icon"><i class="fas fa-check-double"></i></div>
+                    <h3>承認・精算</h3>
+                    <p>毎月<strong>20日締め</strong>、翌月25日に給与合算で振込。申請期限は<strong>毎月20日</strong>厳守です。</p>
+                </div>
+            </div>
+
+            <div class="rules-grid">
+                <div class="pro-tip warning">
+                    <h4><i class="fas fa-exclamation-triangle"></i> 税務調査対策・注意点</h4>
+                    <ul class="rule-list">
+                        <li><strong>目的を明確に:</strong> 移動区間だけでなく「〇〇会社へ訪問のため」など<strong>移動理由</strong>を必ず記載。</li>
+                        <li><strong>タクシー利用時:</strong> 「新大阪駅〜弊社」のように<strong>乗降場所</strong>を必ず記載。</li>
+                        <li><strong>月跨ぎ申請は原則NG:</strong>
+                            2ヶ⽉分を1つの申請にまとめることはできません。ただし、<strong>出張等で月を跨ぐ場合</strong>に限り、備考欄にその旨を記載した上で申請可能です。</li>
+                    </ul>
+                </div>
+                <div class="pro-tip mistake">
+                    <h4><i class="fas fa-times-circle"></i> よくある間違い！</h4>
+                    <div class="mistake-grid">
+                        <div class="mistake-item">
+                            <strong>★ 日付の登録</strong>
+                            <p>必ず<strong>「実際に支払った日」</strong>で登録してください。<br><span class="ng-text">NG：領収書の印刷日や申請した日</span>
+                            </p>
+                        </div>
+                        <div class="mistake-item">
+                            <strong>★ 宿泊税・入湯税</strong>
+                            <p>宿泊費と合算の時は、<strong>《明細追加》</strong>で明細を分けてください。※証憑は必須です。</p>
+                        </div>
+                        <div class="mistake-item">
+                            <strong>★ 10%と8%の混在</strong>
+                            <p>食品（8%）とレジ袋（10%）は、<strong>《明細追加》</strong>で税率を分けて入力してください。※オンライン飲み会等で忘れがちです。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="travel" class="category">
+            <h2 class="category-title"><i class="fas fa-train"></i> 旅費交通費</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>経費科目名</th>
+                            <th>説明・ルール</th>
+                            <th>証憑（エビデンス）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>旅費交通費_電車代</td>
+                            <td>在来線を利用した乗車賃（有料特急以外）。最安経路。※電車・バス合算申請可。</td>
+                            <td>不要（経路検索結果）</td>
+                        </tr>
+                        <tr>
+                            <td>旅費交通費_バス代</td>
+                            <td>路線バス（乗車区間記載）。高速バスは領収書必須。</td>
+                            <td>高速バスは必須</td>
+                        </tr>
+                        <tr>
+                            <td>旅費交通費_新幹線・航空券</td>
+                            <td>有料特急（新幹線等）、航空券代の申請。</td>
+                            <td class="required">必須</td>
+                        </tr>
+                        <tr>
+                            <td>旅費交通費_タクシー代</td>
+                            <td>タクシー利用の申請。<strong>利用目的・乗降場所</strong>を必ず記載。</td>
+                            <td class="required">必須</td>
+                        </tr>
+                        <tr>
+                            <td>旅費交通費_宿泊代</td>
+                            <td>出張等で発生した宿泊代の申請。</td>
+                            <td class="required">必須</td>
+                        </tr>
+                        <tr>
+                            <td>★_宿泊税、入湯税</td>
+                            <td>現地で支払った宿泊税、入湯税。※宿泊費と合算時は《明細追加》で分ける。</td>
+                            <td class="required">必須</td>
+                        </tr>
+                        <tr>
+                            <td>旅費交通費_ガソリン・レンタカー</td>
+                            <td>出張（レンタカー等）、社用車で利用した実費分。</td>
+                            <td class="required">必須</td>
+                        </tr>
+                        <tr>
+                            <td>旅費交通費_駐車場・高速代</td>
+                            <td>出張、社用車で利用した駐車場代、高速料金等の実費分。</td>
+                            <td class="required">必須</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="sub-section" id="allowance-rules">
+                <h3>出張手当（国内）</h3>
+                <p class="rule-text"><strong>定義：</strong>勤務地からの最短経路で<strong>片道150km以上</strong>離れた場所へ移動する業務。150km未満の移動は手当の対象外です。</p>
+                
+                <div class="allowance-grid-row">
+                    <div class="allowance-table-col">
+                        <h4>役職別：1日あたりの支給額</h4>
+                        <div class="rule-table-container">
+                            <table class="rule-table">
+                                <thead>
+                                    <tr><th>役職区分</th><th>日当支給額</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>役員（執行役員含む）</td><td class="highlight-cell">5,000円</td></tr>
+                                    <tr><td>グループ長</td><td class="highlight-cell">4,000円</td></tr>
+                                    <tr><td>チーム長</td><td class="highlight-cell">3,000円</td></tr>
+                                    <tr><td>ユニット長</td><td class="highlight-cell">2,500円</td></tr>
+                                    <tr><td>一般社員</td><td class="highlight-cell">2,000円</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="allowance-table-col">
+                        <h4>【重要】出張パターン別：支給日数</h4>
+                        <div class="rule-table-container">
+                            <table class="rule-table">
+                                <thead>
+                                    <tr><th>パターン</th><th>支給日数</th><th>計（一般社員例）</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>日帰り出張</td><td>1日分</td><td>2,000円</td></tr>
+                                    <tr><td>一泊二日</td><td>1日分</td><td>2,000円</td></tr>
+                                    <tr><td>二泊三日</td><td>2日分</td><td>4,000円</td></tr>
+                                    <tr><td>三泊四日</td><td>3日分</td><td>6,000円</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="allowance-note">
+                    <p><i class="fas fa-info-circle"></i> <strong>計算ルール:</strong> 宿泊数に応じて支給日数が決まります（例：1泊2日の場合は1日分）。</p>
+                    <p><i class="fas fa-external-link-alt"></i> <strong>長期出張時（同拠点2週間〜）:</strong> 日当一律 1,000円/日になります。</p>
+                    <p><i class="fas fa-file-pdf"></i> <strong>規定詳細:</strong> <a href="https://drive.google.com/file/d/1lod9vyGTHfSK5d7jZmwQH1FVxFsp1iRj/view" target="_blank">出張旅費規定（2026/03/01改訂）</a></p>
+                </div>
+            </div>
+
+            <div class="sub-section" id="accommodation-rules">
+                <h3>宿泊費の上限（一泊あたり実費）</h3>
+                <p class="rule-text">出張旅費規定 第14条に基づき、地域および役職に応じて上限額が定められています。</p>
+                <div class="rule-table-container">
+                    <table class="rule-table highlight-header">
+                        <thead>
+                            <tr>
+                                <th>役職区分</th>
+                                <th>A: 東京都23区</th>
+                                <th>B: 都市部 (※1)</th>
+                                <th>C: その他</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>役員</td>
+                                <td>17,000円</td>
+                                <td>14,000円</td>
+                                <td>12,000円</td>
+                            </tr>
+                            <tr>
+                                <td>グループ長</td>
+                                <td>15,000円</td>
+                                <td>12,000円</td>
+                                <td>10,000円</td>
+                            </tr>
+                            <tr>
+                                <td>チーム長以下</td>
+                                <td class="highlight-cell">13,000円</td>
+                                <td class="highlight-cell">10,000円</td>
+                                <td class="highlight-cell">8,000円</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-mini text-muted">※1: 札幌市、名古屋市、大阪市、京都市、福岡市が対象となります。</p>
+            </div>
+        </section>
+
+        <section id="entertainment" class="category">
+            <h2 class="category-title"><i class="fas fa-utensils"></i> 接待交際費・会議費</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>経費科目名</th>
+                            <th>説明・ルール</th>
+                            <th>勘定科目</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>接待飲食代（1万円超/人）</td>
+                            <td>取引先との接待飲食。一人当たり1万円を超える場合。</td>
+                            <td>交際費</td>
+                        </tr>
+                        <tr>
+                            <td>接待飲食代（1万円以下/人）</td>
+                            <td>取引先との接待飲食。一人当たり1万円以下の精算。</td>
+                            <td>会議費</td>
+                        </tr>
+                        <tr>
+                            <td>飲食代（社内飲食費）</td>
+                            <td>慰安目的の社員のみの飲食。※福利厚生枠とは別。</td>
+                            <td>交際費</td>
+                        </tr>
+                        <tr>
+                            <td>手土産代</td>
+                            <td>取引先への手土産代。10%と軽減8%を分けて申請。</td>
+                            <td>交際費</td>
+                        </tr>
+                        <tr>
+                            <td>会議費</td>
+                            <td>商談時の軽微な飲食（場所代）やレンタル会議室代。</td>
+                            <td>会議費</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="welfare" class="category">
+            <h2 class="category-title"><i class="fas fa-heart"></i> 福利厚生</h2>
+            <div class="card-grid">
+                <div class="rule-card">
+                    <h4>飲食代（福利厚生）</h4>
+                    <p>月1人あたり<strong>3,000円</strong>まで。部門内の懇親目的。</p>
+                </div>
+                <div class="rule-card">
+                    <h4>オンライン金平亭</h4>
+                    <p>1人あたり<strong>2,000円</strong>まで。明細追加で税率を分けて申請。</p>
+                </div>
+                <div class="rule-card">
+                    <h4>書籍購入制度</h4>
+                    <p>月<strong>3,000円</strong>まで。有料メディア購読は1,500円まで。</p>
+                </div>
+                <div class="rule-card">
+                    <h4>健康診断オプション</h4>
+                    <p>会社負担上限<strong>20,000円</strong>まで（法定健診含む）。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="others" class="category">
+            <h2 class="category-title"><i class="fas fa-ellipsis-h"></i> その他・事務用品</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>経費科目名</th>
+                            <th>説明・詳細</th>
+                            <th>証憑（エビデンス）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>備品・消耗品費</td>
+                            <td>事務用品、備品代（10%と軽減8%を区別して申請）。</td>
+                            <td class="required">必須</td>
+                        </tr>
+                        <tr>
+                            <td>印刷（コピー）代</td>
+                            <td>コンビニや業者での資料印刷・ポスター作成費用。</td>
+                            <td class="required">必須</td>
+                        </tr>
+                        <tr>
+                            <td>手数料</td>
+                            <td>証明書発行、キャンセル手数料、振込手数料等。</td>
+                            <td class="required">必須</td>
+                        </tr>
+                        <tr>
+                            <td>★通信費（各項目）</td>
+                            <td>切手、レターパック、宅急便（商品以外）など。</td>
+                            <td class="required">必須</td>
+                        </tr>
+                        <tr>
+                            <td>月極駐車場代等</td>
+                            <td>社用車用に契約している月極駐車場代の精算。</td>
+                            <td class="required">契約書・領収書</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer class="doc-footer">
+
+            <div class="contact-section">
+                <h3><i class="fas fa-question-circle"></i> お問い合わせ先</h3>
+                <p>不明点は <strong>バックオフィスグループ 財務経理チーム</strong>、<br>
+                    または Slack <strong><a href="https://officedeyasai.slack.com/archives/C065FL5PCEL"
+                            target="_blank">経費精算_個人立替_相談スレ</a></strong> までお願いいたします。</p>
+            </div>
+
+            <div class="links-section">
+                <h3><i class="fas fa-external-link-alt"></i> 外部リンク・公式ヘルプ</h3>
+                <ul class="footer-links">
+                    <li><a href="https://www.freee.co.jp/expenses/fr-74o4sqt3/?mrasn=1572684.1960124.wZOSbDNs"
+                            target="_blank">freee経費精算 公式サイト</a></li>
+                    <li><a href="https://support.freee.co.jp/hc/ja/categories/200193700-freee%E4%BC%9A%E8%A8%88"
+                            target="_blank">freee会計 サポートデスク（ヘルプ）</a></li>
+                </ul>
+            </div>
+            <div class="print-instructions">
+                <p><i class="fas fa-print"></i> このページをPDFとして保存するには、ブラウザで <strong>Ctrl+P (MacはCmd+P)</strong>
+                    を押し、送信先を「PDFに保存」にしてください。</p>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const btn = document.getElementById('dynamicCalendarBtn');
+            const now = new Date();
+            let targetYear = now.getFullYear();
+            let targetMonth = now.getMonth(); // 0-indexed
+            const today = new Date(targetYear, targetMonth, now.getDate());
+
+            // 日本の祝日リスト (2026-2027)
+            const holidays = [
+                "2026-01-01", "2026-01-12", "2026-02-11", "2026-02-23", "2026-03-20",
+                "2026-04-29", "2026-05-03", "2026-05-04", "2026-05-05", "2026-05-06",
+                "2026-07-20", "2026-08-11", "2026-09-21", "2026-09-22", "2026-09-23",
+                "2026-10-12", "2026-11-03", "2026-11-23",
+                "2027-01-01", "2027-01-11", "2027-02-11", "2027-02-23", "2027-03-21", "2027-03-22",
+                "2027-04-29", "2027-05-03", "2027-05-04", "2027-05-05", "2027-07-19",
+                "2027-08-11", "2027-09-20", "2027-09-23", "2027-10-11", "2027-11-03", "2027-11-23"
+            ];
+
+            function isHolidayOrWeekend(date) {
+                const day = date.getDay();
+                if (day === 0 || day === 6) return true; // 日曜 or 土曜
+                const yyyymmdd = date.getFullYear() + "-" +
+                    String(date.getMonth() + 1).padStart(2, '0') + "-" +
+                    String(date.getDate()).padStart(2, '0');
+                return holidays.includes(yyyymmdd);
+            }
+
+            function getDeadline(year, month) {
+                let d = new Date(year, month, 20);
+                while (isHolidayOrWeekend(d)) {
+                    d.setDate(d.getDate() - 1);
+                }
+                return d;
+            }
+
+            // 提出締切日の算出
+            let deadlineDate = getDeadline(targetYear, targetMonth);
+
+            // 今日が既に締切を過ぎている場合は翌月のサイクルへ
+            if (today > deadlineDate) {
+                targetMonth += 1;
+                if (targetMonth > 11) {
+                    targetMonth = 0;
+                    targetYear += 1;
+                }
+                deadlineDate = getDeadline(targetYear, targetMonth);
+            }
+
+            // 対象期間の計算
+            const currentPeriodEndMonth = targetMonth + 1; // 1-indexed (月表示用)
+            let prevMonthForDisplay = currentPeriodEndMonth - 1;
+            let prevMonthYear = targetYear;
+            if (prevMonthForDisplay === 0) {
+                prevMonthForDisplay = 12;
+                prevMonthYear -= 1;
+            }
+
+            // 前月の最終日取得
+            const lastDayOfPrevMonth = new Date(targetYear, targetMonth, 0).getDate();
+
+            // 給与連携月の計算 (締切月の翌月)
+            let payrollMonth = currentPeriodEndMonth + 1;
+            let payrollYear = targetYear;
+            if (payrollMonth > 12) {
+                payrollMonth = 1;
+                payrollYear += 1;
+            }
+
+            // --- 画面表示の更新 (おさらいセクション) ---
+            const payrollEl = document.getElementById('dynamicPayrollInfo');
+            const prevRangeEl = document.getElementById('dynamicPrevRange');
+            const currRangeEl = document.getElementById('dynamicCurrRange');
+
+            if (payrollEl) payrollEl.textContent = `今回の対象：${currentPeriodEndMonth}月20日締切 / ${payrollYear}年${payrollMonth}月給与連携分`;
+            if (prevRangeEl) prevRangeEl.textContent = `${prevMonthForDisplay}/21 〜 ${prevMonthForDisplay}/${lastDayOfPrevMonth}`;
+            if (currRangeEl) currRangeEl.textContent = `${currentPeriodEndMonth}/1 〜 ${currentPeriodEndMonth}/20`;
+
+            // --- リマインドバナーの動的更新 ---
+            const reminderBanner = document.getElementById('mainReminderBanner');
+            const reminderDateEl = document.getElementById('dynamicReminderDate');
+            const countdownBadge = document.getElementById('countdownBadge');
+            const reminderIcon = document.getElementById('reminderIcon');
+
+            if (reminderDateEl) {
+                // 基本の締切日（今回）を表示
+                let displayText = deadlineDate.getDate();
+                // 祝日による前倒しが発生している場合の補足
+                if (deadlineDate.getDate() !== 20) {
+                    displayText += `（祝日のため前倒し）`;
+                }
+                reminderDateEl.textContent = displayText;
+            }
+
+            // カウントダウン計算 (ミリ秒 -> 日)
+            const diffTime = deadlineDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (countdownBadge) {
+                if (diffDays === 0) {
+                    countdownBadge.textContent = "本日締切！";
+                    countdownBadge.style.display = "inline-block";
+                    reminderBanner.classList.add('urgent');
+                    reminderIcon.className = "fas fa-exclamation-triangle";
+                } else if (diffDays > 0 && diffDays <= 3) {
+                    countdownBadge.textContent = `あと${diffDays}日`;
+                    countdownBadge.style.display = "inline-block";
+                }
+            }
+
+            // --- カレンダーリンクの作成 (YYYYMMDD形式) ---
+            const title = "経費申請締日";
+            const details = `月またぎの申請はNG\n${prevMonthForDisplay}月21日〜${prevMonthForDisplay}月${lastDayOfPrevMonth}日、${currentPeriodEndMonth}月1日〜${currentPeriodEndMonth}月20日 の申請をしましょう`;
+
+            const yyyy = deadlineDate.getFullYear();
+            const mm = String(deadlineDate.getMonth() + 1).padStart(2, '0');
+            const dd = String(deadlineDate.getDate()).padStart(2, '0');
+            const dateStr = `${yyyy}${mm}${dd}`;
+
+            const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&details=${encodeURIComponent(details)}&dates=${dateStr}/${dateStr}`;
+
+            if (btn) btn.href = calendarUrl;
+
+            // --- ニュースページネーション制御 ---
+            const pageLinks = document.querySelectorAll('.page-link');
+            const newsPages = document.querySelectorAll('.news-page');
+
+            pageLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const targetPage = this.getAttribute('data-target');
+                    
+                    // アクティブ状態の切り替え
+                    pageLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // 表示ページの切り替え
+                    newsPages.forEach(page => {
+                        if (page.getAttribute('data-page') === targetPage) {
+                            page.style.display = 'block';
+                        } else {
+                            page.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

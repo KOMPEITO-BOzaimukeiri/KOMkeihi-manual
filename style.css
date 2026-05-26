@@ -105,6 +105,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Inter', 'M PLUS 1p', sans-serif;
     background-color: var(--bg-color);
@@ -669,6 +673,170 @@ th {
 .rule-card h4 {
     margin-bottom: 0.5rem;
     color: var(--primary-color);
+}
+
+/* NEWS Section - Modern List Style */
+.news-container {
+    margin-top: 1.5rem;
+}
+
+.news-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0.5rem;
+    border-bottom: 1px solid #edf2f7;
+    gap: 1.5rem;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+}
+
+.news-item:hover {
+    background: #fdfdfd;
+}
+
+.news-tag {
+    font-size: 0.7rem;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-weight: 700;
+    min-width: 70px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.news-tag.important {
+    background: #fff5f5;
+    color: #c53030;
+    border-color: #feb2b2;
+}
+
+.news-tag.update {
+    background: #ebf8ff;
+    color: #2b6cb0;
+    border-color: #bee3f8;
+}
+
+.news-date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    min-width: 85px;
+}
+
+.news-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-color);
+    flex: 1;
+}
+
+.news-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.page-link {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.85rem;
+    background: white;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.page-link.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.page-link:hover:not(.active) {
+    background: #f7fafc;
+    border-color: var(--primary-color);
+}
+
+/* Detail Tables for Rules */
+.allowance-grid-row {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.allowance-table-col {
+    flex: 1;
+    min-width: 300px;
+}
+
+.allowance-table-col h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    color: var(--secondary-color);
+    border-left: 3px solid var(--accent-color);
+    padding-left: 0.75rem;
+}
+
+.rule-table-container {
+    margin: 1.5rem 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.rule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.rule-table th {
+    background: #f8fafc;
+    color: var(--secondary-color);
+    font-weight: 700;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.rule-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #edf2f7;
+    text-align: center;
+}
+
+.rule-table tr:last-child td {
+    border-bottom: none;
+}
+
+.rule-table .text-left {
+    text-align: left;
+}
+
+.rule-table .highlight-cell {
+    background: #fffcf0;
+    font-weight: 700;
+    color: #b7791f;
+}
+
+@media (max-width: 600px) {
+    .news-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    .news-date {
+        min-width: auto;
+    }
 }
 
 /* Alerts */
